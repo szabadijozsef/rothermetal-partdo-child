@@ -3,6 +3,8 @@ name: Theme Backup (ZIP to Releases)
 on:
   push:
     branches: [ main ]
+  schedule:
+    - cron: '0 2 * * *'   # minden nap 02:00 UTC
 
 permissions:
   contents: write
@@ -14,34 +16,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare ZIP
+      - name: Prepare ZIP with BUILDINFO
         run: |
           mkdir -p dist
           ts="$(date -u +'%Y%m%d-%H%M%S')"
           zipname="partdo-child-${ts}.zip"
-          # csak a két fájl + .gitignore
-          zip -j "dist/${zipname}" functions.php style.css .gitignore
+
+          # Meta adatok a buildhez
+          commit_sha="${GITHUB_SHA}"
+          commit_msg="$(git log -1 --pretty=%B | tr -d '\r')"
+          repo="${GITHUB_REPOSITORY}"
+          run_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          # BUILDINFO.txt létrehozása
+          {
+            echo "REPO=${repo}"
+            echo "COMMIT_SHA=${commit_sha}"
+            echo "COMMIT_MSG=${commit_msg}"
+            echo "UTC_TIME=${ts}"
+            echo "RUN_URL=${run_url}"
+          } > BUILDINFO.txt
+
+          # ZIP (functions.php, style.css, .gitignore, BUILDINFO.txt)
+          zip -j "dist/${zipname}" functions.php style.css .gitignore BUILDINFO.txt
+
           echo "ZIP_NAME=${zipname}" >> $GITHUB_ENV
           echo "TAG_NAME=backup-${{ github.run_number }}" >> $GITHUB_ENV
-          echo "RELEASE_NAME=Auto backup #${{ github.run_number }} ($ts)" >> $GITHUB_ENV
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.RELEASE_NAME }}
-          draft: false
-          prerelease: false
-
-      - name: Upload ZIP to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/${{ env.ZIP_NAME }}
-          asset_name: ${{ env.ZIP_NAME }}
-          asset_content_type: application/zip
+          echo "RELEASE_NAME=Auto backup #${{ github.run_number }} (${ts})" >> $GITHUB_ENV
