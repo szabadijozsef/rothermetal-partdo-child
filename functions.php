@@ -1,6 +1,6 @@
 <?php
 /**
- * functions.php
+ * functions.php 2025.09.09.-től github backup
  * @package WordPress
  * @subpackage Partdo Child
  * @since Partdo Child 1.0
@@ -251,7 +251,7 @@ add_filter('woocommerce_get_price_html', function ($price_html, $product) {
 
 
 
-// WP-CLI parancs: wp rothermetal sync-onsale
+// 15. WP-CLI parancs: wp rothermetal sync-onsale
 if (defined('WP_CLI') && WP_CLI) {
     WP_CLI::add_command('rothermetal sync-onsale', function() {
         global $wpdb;
