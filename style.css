@@ -1,0 +1,919 @@
+/*
+Theme Name:   Partdo Child
+Theme URI:    http://klbtheme.com/partdo/
+Description:  Partdo Child Theme
+Author:       KlbTheme
+Author URI:   http://themeforest.net/user/KlbTheme
+Template:     partdo
+Version:      1.0
+License:      GNU General Public License v2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+Text Domain:  partdo-child
+*/
+
+/* ================== ÁLTALÁNOS BEÁLLÍTÁSOK ================== */
+
+/* ---------- Ár sorok (Katalógus, Wholesale) ---------- */
+.price-row {
+    display: block;
+    line-height: 1.3;
+    text-align: left;
+}
+.price-row .custom-label {
+    font-weight: 600;
+    margin-right: 0.25em;
+    font-size: 0.8rem;
+}
+.price-row .woocommerce-Price-amount {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ---------- Katalógus ár ---------- */
+.catalog-price .woocommerce-Price-amount {
+    color: #000;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ---------- Katalógus ár áthúzva ---------- */
+.catalog-price .woocommerce-Price-amount[style*="text-decoration: line-through;"] {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* ---------- Wholesale ár ---------- */
+.wholesale-price .woocommerce-Price-amount {
+    color: #007b00;
+    font-weight: 700;
+}
+
+/* ---------- Akciós ár ---------- */
+.sale-price .woocommerce-Price-amount {
+    color: #b80707;
+    font-weight: 600;
+}
+
+
+/* ================== RESPONSIVE BEÁLLÍTÁSOK ================== */
+
+/* ---------- Termék lista / mobil nézet ---------- */
+@media (max-width: 768px) {
+    ul.products li.product {
+        width: 100% !important;
+        float: none !important;
+        margin: 0 !important;
+        clear: both !important;
+    }
+    .woocommerce .products {
+        display: block !important;
+    }
+}
+
+/* ---------- Product-extra-details mobilon ---------- */
+@media (max-width: 992px) {
+  .hide-below-992 {
+    display: block !important;
+  }
+  .product-extra-details {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+@media (max-width: 576px) {
+  .woocommerce-product-attributes.shop_attributes {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .woocommerce-product-attributes th,
+  .woocommerce-product-attributes td {
+    padding: .5rem .75rem;
+    vertical-align: top;
+  }
+  .product-extra-details {
+    overflow-x: auto;
+  }
+}
+
+
+/* ================== KOSÁR GOMB / TERMÉK BLOKK ================== */
+.product-cart-form {
+    display: flex;
+    gap: 0.5em;
+    align-items: flex-start;
+}
+
+/* ---------- Gombok ---------- */
+button:not(.link), 
+.button:not(.link), 
+input[type=submit]:not(.link), 
+.submit:not(.link), 
+.btn:not(.link) {
+    color: #fff;
+    background-color: #b80707;
+    border-radius: 1px;
+}
+button:not(.link):hover, 
+.button:not(.link):hover, 
+input[type=submit]:not(.link):hover, 
+.submit:not(.link):hover, 
+.btn:not(.link):hover {
+    border-color: transparent;
+    background-color: #333;
+}
+
+/* ---------- Kosár gomb termékoldalon ---------- */
+.product-detail .single_add_to_cart_button {
+    height: 2.875rem;
+    margin-right: 7px;
+    color: #fff;
+    background-color: #b80707;
+    border: 1px solid #b80707;
+    flex: 1;
+}
+
+
+/* ================== AJAX SEARCH PLUGIN ================== */
+.aws-search-result .aws_result_sku,
+.aws-search-result .aws_result_gtin,
+.aws-search-result .aws_result_gtin::before {
+    color: #b80707 !important;
+    font-weight: 400;
+}
+.aws-search-result .aws_result_gtin::before {
+    content: "Gyártói cikkszám: ";
+    margin-right: 3px;
+}
+.aws-search-result .aws_result_term {
+    color: #333 !important;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 400;
+    padding-top: 7px;
+}
+.aws-search-result .aws_result_term::before {
+    content: "Kategóriák: ";
+    font-weight: 600;
+    color: #333 !important;
+    margin-right: 3px;
+}
+
+
+/* ================== ÁR BLOKK KATEGÓRIA NÉZET ================== */
+.archive .price,
+.tax-product_cat .price,
+.tax-product_tag .price {
+    display: block !important;
+    text-align: left;
+}
+.archive .price .price-row,
+.tax-product_cat .price .price-row,
+.tax-product_tag .price .price-row {
+    display: block;
+    margin-bottom: 0.3em;
+}
+
+
+/* ================== TERMÉK META / EGYÉB ELEMEK ================== */
+.product-meta .product-sku span,
+.product-manufactured-part-number {
+    font-size: 0.8125rem;
+    line-height: normal;
+    font-weight: 500;
+    color: var(--color-text-description);
+}
+.product-footer, 
+.product-content-fade,
+.scrollToTop, 
+.button-show,
+.klb-single-stock,
+.product-stock.in-stock,
+.klb-product-attributes,
+
+.logged-in #menu-item-59558,
+.product-unique-id {
+    display: none !important;
+}
+
+/* ================== TERMÉKOLDAL ÁR ================== */
+.single-product .price-row .woocommerce-Price-amount.amount {
+    font-size: 0.8em;
+    font-weight: bold;
+}
+.single-product .price-row.catalog-price .woocommerce-Price-amount.amount,
+.single-product .price-row.sale-price .woocommerce-Price-amount.amount {
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+
+/* ================== TERMÉKKÁRTYA EGYSÉGESÍTÉS ================== */
+
+/* ---------- Teljes kártya rugalmas oszlop ---------- */
+.products .product .product-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ---------- Tartalom ---------- */
+.products .product .product-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.products .product .content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+/* ================== TERMÉKNÉV BLOKK (3 sor fix + piros csík) ================== */
+
+.products .product .product-title{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  line-height: 1.4;
+  min-height: calc(3 * 1em * 1.6);
+  max-height: calc(3 * 1em * 1.6);
+  margin: 0;
+
+  /* IDE KERÜL A CSÍK – mindig fix helyen lesz */
+  border-bottom: 2px solid #b80707;
+  padding-bottom: 0.75rem; /* távolság a csík és a következő blokk között */
+}
+
+.products .product .product-title > a{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: inherit;
+}
+
+/* Mini kosárban a termékcím ne legyen fix 3 soros */
+.fl-mini-cart-content .product-title {
+  height: auto !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  overflow: visible !important;
+  display: block !important;
+}
+
+/* ---------- Ár + Kosár blokk ---------- */
+.products .product .product-cart-form {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  margin-bottom: 0.625rem;
+  margin-top: auto;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+/* ---------- Alsó elválasztó vonal ---------- */
+.klbth-module-category-products .column-item,
+.products .product .column-item {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+/* Egytermék oldal: árak egymás alatt */
+.single-product .product-detail .price {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start;
+  gap: .25rem; /* kis függőleges távolság a sorok között */
+}
+
+/* Biztos, ami biztos: a sorok blokkosan jelenjenek meg */
+.single-product .product-detail .price .price-row {
+  display: block !important;
+}
+
+/* Ha a téma valahol inline/inline-flex-et erőltet */
+.single-product .product-detail p.price,
+.single-product .product-detail .price * {
+  white-space: normal;
+}
+/* Egytermék oldal: Akciós ár nagyobb */
+.single-product .product-detail .price .price-row.sale-price .woocommerce-Price-amount.amount {
+  font-size: 1.35rem; /* állítsd ízlés szerint: 1.2–1.6rem */
+  font-weight: 700;
+}
+
+/* A "Akciós ár:" felirat legyen kicsit hangsúlyosabb */
+.single-product .product-detail .price .price-row.sale-price .custom-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Katalógus ár legyen finomabb/smaller az ellentéthez */
+.single-product .product-detail .price .price-row.catalog-price .woocommerce-Price-amount.amount {
+  font-size: 0.95rem;
+  color: #777;
+}
+
+/* Ha a téma felülírná, adj hozzá !important-et: */
+.single-product .product-detail .price .price-row.sale-price .woocommerce-Price-amount.amount {
+  font-size: 1.35rem !important;
+}
+/* === ÁRAK BLOKK: MINIMÁL SORKÖZ === */
+.single-product .product-detail .price {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start;
+    gap: 0.05rem !important; /* szinte nulla távolság az árak között */
+    margin-bottom: 0.3rem !important;
+    margin-top: 0.2rem !important;
+    padding: 0 !important;
+}
+
+/* Ár sorok teljesen feszesen */
+.single-product .product-detail .price .price-row {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+}
+
+/* Akciós ár nagyobb, de feszesebb */
+.single-product .product-detail .price .price-row.sale-price .woocommerce-Price-amount.amount {
+    font-size: 1.3rem !important;
+    font-weight: 700;
+    line-height: 1.1 !important;
+}
+
+/* Katalógus ár kisebb, szürkébb és közelebb */
+.single-product .product-detail .price .price-row.catalog-price .woocommerce-Price-amount.amount {
+    font-size: 1.2rem !important;
+    color: #000;
+    line-height: 1.1 !important;
+}
+
+/* === CIKKSZÁM + GYÁRTÓI CIKKSZÁM FESZES === */
+.single-product .product-meta .product-sku {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+}
+
+.single-product .product-manufactured-part-number {
+    margin: 0.05rem 0 0.2rem 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+}
+
+/* === BLOKKOK KÖZÖTT IS KISEBB HELY === */
+.single-product .product-detail .product-meta,
+.single-product .product-detail .product-manufactured-part-number,
+.single-product .product-detail .price,
+.single-product .product-detail .woocommerce-product-details__short-description {
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.2rem !important;
+    padding: 0 !important;
+}
+
+/* Az első katalógus link alatt ne legyen vonal */
+.single-product .woocommerce-product-details__short-description p:first-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0.3rem;
+}
+
+/* Csak a 8afc3d4 szekcióban lévő bannerek címéhez */
+.elementor-section[data-id="8afc3d4"] .entry-heading.banner-heading {
+    background-color: #b80707;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    line-height: 1.2;
+    display: inline-block;
+}
+
+/* Kisebb betűméret a címeknél */
+.elementor-section[data-id="8afc3d4"] .entry-heading.banner-heading .entry-title {
+    color: #fff;
+    margin: 0;
+    font-size: 1rem; /* jelenlegi méret helyett kisebb */
+    font-weight: 600;
+}
+
+/* Ha van link a címben, az is fehér legyen */
+.elementor-section[data-id="8afc3d4"] .entry-heading.banner-heading a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.elementor-section[data-id="8afc3d4"] .entry-heading.banner-heading a:hover {
+    text-decoration: underline;
+}
+/* Desktop + mobil hamburger "Menü" felirat */
+.quick-button.toggle-button .quick-button-inner{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.quick-button.toggle-button .quick-icon::after{
+  content: "Menü";
+  font-size: 14px;
+	margin-left: 6px;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-block;
+  transform: translateY(0.5px);
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* Hover desktopon */
+.header-main .quick-button.toggle-button:hover .quick-icon::after{
+  opacity: 1;
+}
+/* Mobil alsó menü – minimal fix (WP-safe) */
+.mobile-bottom-menu{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
+.mobile-bottom-menu .mobile-menu ul{
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mobile-bottom-menu .menu-item{
+  flex: 1 1 25%;
+  text-align: center;
+}
+.mobile-bottom-menu .menu-item a{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 0;
+  text-decoration: none;
+}
+/* Kiállítás címke – kényszerített stílus minden állapotra */
+.entry-categories a,
+.entry-categories a:link,
+.entry-categories a:visited,
+.entry-categories a:hover,
+.entry-categories a:active,
+.single-post .entry-categories a,
+.archive .entry-categories a {
+  display: inline-block !important;
+  background-color: #b80707 !important;
+  color: #fff !important;
+  padding: .25rem .6rem !important;
+  border-radius: 999px !important;
+  text-decoration: none !important;
+  border: 0 !important;
+  line-height: 1.1 !important;
+}
+/* Bejegyzés meta: szerző és kommentek elrejtése */
+.entry-meta .meta-item:first-child,   /* author blokk */
+.entry-meta .meta-item:nth-child(2) { /* comment blokk */
+    display: none !important;
+}
+/* === Teljes képernyős mobil drawer (JYSK-stílus) === */
+@media (max-width: 768px) {
+  /* A drawer legyen teljes szélességű és magasságú */
+  .site-drawer {
+    max-width: none !important;       /* fix 21.25rem kiütése */
+    width: 100% !important;           /* teljes szélesség */
+    height: 100% !important;          /* teljes magasság */
+    position: fixed !important;       /* mindig a viewport tetején */
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    background: #fff !important;
+    z-index: 9999 !important;
+    overflow: hidden !important;      /* a belső tartalom görget */
+    box-shadow: none !important;
+  }
+
+  /* Ha a téma oldalhoz ragasztja, bal/jobb irányú állapotokat is kezelünk */
+  .site-drawer.site-drawer--left,
+  .site-drawer.site-drawer--right {
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* A drawer belső része (tartalom) görgethető legyen */
+  .site-drawer__inner,
+  .site-drawer__body {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* iOS puha scroll */
+    overscroll-behavior: contain;
+    background: #fff;
+  }
+
+  /* Háttérfátyol, ha van */
+  .site-drawer__backdrop,
+  .site-overlay,
+  .drawer-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    background: rgba(0, 0, 0, 0.45) !important;
+    z-index: 9998 !important;
+    transition: opacity 0.2s ease;
+  }
+
+  /* Az alsó mobil menü mindig a drawer alatt maradjon */
+  .mobile-bottom-menu {
+    z-index: 9990 !important;
+  }
+}
+
+/* Amikor a drawer nyitva van, zároljuk az oldal görgetését */
+html.drawer-open,
+
+/* Ha a drawer nyitva van, tiltsuk az oldalgörgetést */
+html.drawer-open,
+body.drawer-open {
+  position: fixed !important;
+  overflow: hidden !important;
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* mobilon ne görgessen */
+}
+/* Akció badge testreszabás */
+.aws_onsale {
+    background-color: #b80707 !important;  /* háttérszín (pl. piros) */
+    color: #ffffff !important;             /* szövegszín */
+    font-weight: bold;                     /* vastag betű */
+    padding: 3px 8px;                      /* belső margó */
+    border-radius: 4px;                    /* lekerekített sarkok */
+    font-size: 10px;                       /* betűméret */
+    text-transform: uppercase;             /* nagybetűsítés */
+}
+/* Akciós termékek blokk háttér piros, szöveg fehér */
+.fibofilters-block--source--on_sale {
+    background-color: #b80707;
+    padding: 10px;
+    border-radius: 6px; /* opcionális, szép lekerekítés */
+}
+
+/* Fehér szöveg minden benne lévő elemre */
+.fibofilters-block--source--on_sale,
+.fibofilters-block--source--on_sale h3,
+.fibofilters-block--source--on_sale .fibofilters-item__label span,
+.fibofilters-block--source--on_sale .fibofilters-item__counter {
+    color: #fff !important;
+}
+
+/* Opcionális: félkövér kiemelés */
+.fibofilters-block--source--on_sale h3,
+.fibofilters-block--source--on_sale .fibofilters-item__label span,
+.fibofilters-block--source--on_sale .fibofilters-item__counter {
+    font-weight: bold;
+}
+
+
+/* --- Hover állapot: szürke háttér (#333), fehér szöveg --- */
+button:not(.link):hover,
+.button:not(.link):hover,
+input[type=submit]:not(.link):hover,
+.submit:not(.link):hover,
+.btn:not(.link):hover {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+/* --- Active állapot: vissza piros háttér (#b80707), fehér szöveg --- */
+button:not(.link):active,
+.button:not(.link):active,
+input[type=submit]:not(.link):active,
+.submit:not(.link):active,
+.btn:not(.link):active {
+    background-color: #b80707 !important;
+    color: #fff !important;
+}
+/* === TERMÉKOLDAL — kompakt ár-dobozok, nem teljes szélesség === */
+body.single-product .product-detail p.price{
+  /* a konténer a tartalomhoz igazodik, NEM 100% széles */
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;        /* a két sor azonos széles a konténerhez képest */
+  gap: 8px !important;
+  width: max-content !important;          /* a szélesebb sorhoz igazodik */
+  max-width: 100% !important;             /* ne lógjon ki mobilon */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* A két sor doboza (címke + ár) */
+body.single-product .product-detail p.price .price-row{
+  display: flex !important;               /* blokk helyett: flex, hogy szépen igazodjon */
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: auto !important;                 /* NE legyen 100% */
+  margin: 0 !important;
+  padding: .625rem 1.875rem !important;   /* mint a submit button */
+  border-radius: 1px !important;
+  box-sizing: border-box !important;
+  line-height: 1.3 !important;
+  color: #fff !important;
+}
+
+/* Színek */
+body.single-product .product-detail p.price .catalog-price{ background:#333 !important; }
+body.single-product .product-detail p.price .sale-price{    background:#b80707 !important; }
+
+/* Tipó + fehér felirat/összeg */
+body.single-product .product-detail p.price .price-row .custom-label,
+body.single-product .product-detail p.price .price-row .woocommerce-Price-amount{
+  color:#fff !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+}
+
+/* Katalógus ár legyen áthúzva */
+body.single-product .product-detail p.price .catalog-price .woocommerce-Price-amount.amount{
+  text-decoration: line-through !important;
+  opacity:.95 !important;
+}
+
+/* Mobilon kicsit kisebb padding */
+@media (max-width: 991.98px){
+  body.single-product .product-detail p.price .price-row{
+    padding: .5rem 1rem !important;
+  }
+}
+/* TERMÉKOLDAL – extra hely az Akciós ár doboz ALATT */
+body.single-product .product-detail p.price .sale-price {
+  margin-bottom: 12px !important; /* állíthatod: 8–20px */
+}
+
+/* TERMÉKOLDAL – extra hely a teljes árblokk FÖLÖTT, ha NINCS Gyártói cikkszám */
+body.single-product .product-detail:not(:has(.product-manufactured-part-number:not(:empty):not([hidden]):not(.hidden):not([style*="display:none"]))) p.price {
+  margin-top: 12px !important;
+}
+
+/* Fallback, ha a böngésző nem támogatja a :has()-t:
+   - alapból adj top margót,
+   - ha van LÁTHATÓ gyártói cikkszám blokk, vedd le. */
+@supports not(selector(:has(*))) {
+  body.single-product .product-detail p.price {
+    margin-top: 12px !important;
+  }
+  body.single-product .product-detail .product-manufactured-part-number:not([hidden]):not(.hidden):not([style*="display:none"]) ~ p.price {
+    margin-top: 0 !important;
+  }
+}
+/* === Termékkártya: Kosár gomb alul, középen, szöveggel === */
+
+/* a kártya oszlop legyen rugalmas (ha még nem az) */
+.products .product .product-wrapper{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+/* a kosár blokkot toljuk le az aljára és középre */
+.products .product .product-cart-form{
+  margin-top:auto !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+
+/* felülírjuk a parent ikon-pill stílust */
+.products .product .product-cart-form a.button,
+.products .product .product-cart-form .add_to_cart_button{
+  font-size: .875rem !important;          /* látszódjon a szöveg */
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:.5rem !important;
+  width:auto !important;                   /* ne 2rem négyzet legyen */
+  height:2.375rem !important;              /* téma alap magassága */
+  padding:.625rem 1.25rem !important;      /* gomb paddings */
+  margin: 0 auto !important;               /* KÖZÉPRE */
+  background:#b80707 !important;           /* a te pirosod */
+  color:#fff !important;
+  border-radius: 1px !important;
+}
+
+/* ne tolja jobbra */
+.products .product .product-cart-form a.button{
+  margin-left: 0 !important;
+}
+
+/* ikon a szöveg mellett szépen */
+.products .product .product-cart-form a.button i{
+  font-size:1.125rem !important;
+  line-height:1;
+  margin:0 !important;
+}
+/* === KOSÁR GOMB FELIRAT MÉRET === */
+.products .product .product-cart-form a.button,
+.products .product .product-cart-form .add_to_cart_button {
+  font-size: 13px !important;  /* kisebb felirat */
+  font-weight: 600 !important; /* hogy jól olvasható maradjon */
+  padding: .5rem 1rem !important; /* kicsit kisebb padding is */
+}
+
+/* Ikon mérete marad nagyobb, mint a felirat */
+.products .product .product-cart-form a.button i {
+  font-size: 16px !important;
+  margin-right: 4px; /* kis távolság az ikon és a szöveg között */
+}
+/* === KOSÁR GOMB HOVER EGYSÉGESÍTÉS === */
+
+/* Termékkártyán a kosár gomb hover állapot */
+.products .product .product-cart-form a.button.add_to_cart_button:hover {
+    background-color: #000 !important; /* ugyanaz, mint a single gombnál */
+    color: #fff !important;
+    border-color: #000 !important;
+    opacity: 1 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Ha az ikon is fehérré váltson hoverkor */
+.products .product .product-cart-form a.button.add_to_cart_button:hover i {
+    color: #fff !important;
+}
+
+/* Normál állapot a lista nézetben */
+.products .product .product-cart-form a.button.add_to_cart_button {
+    background-color: #b80707 !important; /* piros alap */
+    color: #fff !important;
+    border: 1px solid #b80707 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: .5rem 1rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .4rem !important;
+    transition: all 0.2s ease-in-out;
+}
+/* === WooCommerce "Kosár" link elrejtése a gomb után === */
+.products .product .product-cart-form a.added_to_cart.wc-forward {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* WHOLESALE = pont olyan, mint a SALE, csak zöld színnel */
+body.single-product .product-detail p.price .price-row.wholesale-price{
+  /* ugyanaz az elrendezés, méret és spacing, mint a többi box */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: auto !important;
+  padding: .625rem 1.875rem !important;   /* mint a többi box */
+  margin: 0 !important;
+  box-sizing: border-box !important;
+
+  /* stílus-különbségek */
+  background: #2e7d32 !important;         /* zöld háttér */
+  color: #fff !important;
+  border-radius: 1px !important;           /* ugyanaz a sarok, mint a többinél */
+}
+
+/* Felirat és összeg tipója ugyanaz, mint az akciós dobozban */
+body.single-product .product-detail p.price .price-row.wholesale-price .custom-label{
+  font-size: .95rem !important;            /* mint sale */
+  font-weight: 700 !important;
+  color: #fff !important;
+  margin-right: .5rem !important;
+  white-space: nowrap !important;
+}
+body.single-product .product-detail p.price .price-row.wholesale-price .woocommerce-Price-amount.amount{
+  font-size: 1.3rem !important;            /* mint sale */
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+}
+/* === ÁR-DOBOZOK TIPÓ EGYSÉGESÍTÉSE (katalógus / akciós / wholesale) === */
+:root{
+  --rm-price-label-size: .95rem;   /* "Katalógus ár:" / "Akciós ár:" / "Az Ön ára:" */
+  --rm-price-amount-size: 1.30rem; /* 200,00 € / 176,00 € stb. */
+  --rm-price-weight: 700;
+  --rm-line-height: 1.15;
+}
+
+/* Minden ár-sor (csak a termékoldali ár-blokkban) */
+body.single-product .product-detail p.price .price-row{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: .65rem !important;
+  padding: .625rem 1.875rem !important;
+  width: auto !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  line-height: var(--rm-line-height) !important;
+}
+
+/* Címkék – minden dobozban ugyanaz a méret és vastagság */
+body.single-product .product-detail p.price .price-row .custom-label{
+  font-size: var(--rm-price-label-size) !important;
+  font-weight: var(--rm-price-weight) !important;
+  white-space: nowrap !important;
+}
+
+/* Összegek – minden dobozban ugyanaz a méret és vastagság */
+body.single-product .product-detail p.price .price-row .woocommerce-Price-amount.amount,
+body.single-product .product-detail p.price .price-row .woocommerce-Price-amount.amount bdi,
+body.single-product .product-detail p.price .price-row .woocommerce-Price-currencySymbol{
+  font-size: var(--rm-price-amount-size) !important;
+  font-weight: var(--rm-price-weight) !important;
+  line-height: var(--rm-line-height) !important;
+  white-space: nowrap !important;
+}
+
+/* Színek és hátterek: csak vizuális különbség, tipó azonos marad */
+body.single-product .product-detail p.price .catalog-price{
+  background:#333 !important;
+  color:#fff !important;
+}
+body.single-product .product-detail p.price .sale-price{
+  background:#b80707 !important; /* piros */
+  color:#fff !important;
+}
+body.single-product .product-detail p.price .wholesale-price{
+  background:#2e7d32 !important; /* zöld */
+  color:#fff !important;
+  border-radius: 0 !important;    /* kért szögletes sarok */
+}
+
+/* Katalógus ár továbbra is áthúzva, de méretben egységes */
+body.single-product .product-detail p.price .catalog-price .woocommerce-Price-amount.amount{
+  text-decoration: line-through !important;
+  opacity:.95 !important;
+}
+
+/* A belső elemek színe egységesen fehér a színes dobozokban */
+body.single-product .product-detail p.price .price-row .custom-label,
+body.single-product .product-detail p.price .price-row .woocommerce-Price-amount{
+  color:#fff !important;
+}
+
+/* A két sor közti függőleges ritmus feszes és egységes */
+body.single-product .product-detail p.price{
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  width: max-content !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Mobil: kisebb padding, hogy ne törjön */
+@media (max-width: 991.98px){
+  body.single-product .product-detail p.price .price-row{
+    padding: .5rem 1rem !important;
+  }
+}
+/* Akciók oldal: törjük oszlopba a .price-t, a sorok egymás alatt legyenek */
+body.page-id-60128 .products .product .price{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: .25rem !important;
+  white-space: normal !important;  /* ne kényszerítse egy sorba */
+}
+
+/* A két ár-sor tényleg blokkban legyen */
+body.page-id-60128 .products .product .price .price-row{
+  display: block !important;
+  margin: 0 0 .25rem !important;
+  line-height: 1.3 !important;
+}
+
+/* --- KATALÓGUS ÁTHÚZÁS – feltételesen, csak ha a PHP tette rá inline --- */
+
+/* Alap: SOHA ne legyen áthúzás */
+body.single-product .product-detail p.price .catalog-price .woocommerce-Price-amount.amount{
+  text-decoration: none !important;
+}
+
+/* Csak akkor húzzuk át, ha a belső span-on tényleg ott az inline stílus */
+body.single-product .product-detail p.price .catalog-price .woocommerce-Price-amount.amount[style*="text-decoration"]{
+  text-decoration: line-through !important;
+}
