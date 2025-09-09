@@ -4,42 +4,98 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '0 2 * * *'   # minden nap 02:00 UTC
+    - cron: '0 * * * *'  # minden egész órában (UTC)
 
 permissions:
   contents: write
 
+concurrency:
+  group: backup-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   backup:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Csak 08:00–22:00 között fusson tovább (Europe/Budapest)
+      - name: Guard – csak 08:00–22:00 Europe/Budapest között
+        id: guard
+        run: |
+          HOUR=$(TZ=Europe/Budapest date +%H)
+          echo "Local hour (Europe/Budapest) = $HOUR"
+          if [ "$HOUR" -lt 8 ] || [ "$HOUR" -gt 22 ]; then
+            echo "Kívül esik a 08–22 idősávon, a backup lépések most kihagyásra kerülnek."
+            echo "DO_BACKUP=false" >> $GITHUB_ENV
+          else
+            echo "Idősávon belül – backup mehet."
+            echo "DO_BACKUP=true" >> $GITHUB_ENV
+          fi
+
+      - name: Stop if outside window
+        if: env.DO_BACKUP == 'false'
+        run: echo "Skip backup – next run at the next hour within 08–22."
+
+      # ZIP készítés BUILDINFO-val
       - name: Prepare ZIP with BUILDINFO
+        if: env.DO_BACKUP == 'true'
         run: |
           mkdir -p dist
-          ts="$(date -u +'%Y%m%d-%H%M%S')"
-          zipname="partdo-child-${ts}.zip"
+          TS_UTC="$(date -u +'%Y%m%d-%H%M%S')"
+          TS_BUD="$(TZ=Europe/Budapest date +'%Y%m%d-%H%M%S')"
 
-          # Meta adatok a buildhez
-          commit_sha="${GITHUB_SHA}"
-          commit_msg="$(git log -1 --pretty=%B | tr -d '\r')"
-          repo="${GITHUB_REPOSITORY}"
-          run_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          ZIPNAME="partdo-child-${TS_BUD}.zip"
+          COMMIT_SHA="${GITHUB_SHA}"
+          COMMIT_MSG="$(git log -1 --pretty=%B | tr -d '\r')"
+          REPO="${GITHUB_REPOSITORY}"
+          RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          BRANCH="${GITHUB_REF_NAME}"
 
-          # BUILDINFO.txt létrehozása
-          {
-            echo "REPO=${repo}"
-            echo "COMMIT_SHA=${commit_sha}"
-            echo "COMMIT_MSG=${commit_msg}"
-            echo "UTC_TIME=${ts}"
-            echo "RUN_URL=${run_url}"
-          } > BUILDINFO.txt
+          cat > BUILDINFO.txt <<EOF
+REPO=${REPO}
+BRANCH=${BRANCH}
+COMMIT_SHA=${COMMIT_SHA}
+COMMIT_MSG=${COMMIT_MSG}
+UTC_TIME=${TS_UTC}
+BUD_TIME=${TS_BUD}
+RUN_URL=${RUN_URL}
+EOF
 
-          # ZIP (functions.php, style.css, .gitignore, BUILDINFO.txt)
-          zip -j "dist/${zipname}" functions.php style.css .gitignore BUILDINFO.txt
+          # ZIP (csak a kulcsfájlok + BUILDINFO)
+          zip -j "dist/${ZIPNAME}" functions.php style.css .gitignore BUILDINFO.txt
 
-          echo "ZIP_NAME=${zipname}" >> $GITHUB_ENV
-          echo "TAG_NAME=backup-${{ github.run_number }}" >> $GITHUB_ENV
-          echo "RELEASE_NAME=Auto backup #${{ github.run_number }} (${ts})" >> $GITHUB_ENV
+          echo "ZIP_NAME=${ZIPNAME}" >> $GITHUB_ENV
+          echo "TAG_NAME=backup-${TS_BUD}-${GITHUB_RUN_ID}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Auto backup ${TS_BUD} (RUN ${GITHUB_RUN_ID})" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        if: env.DO_BACKUP == 'true'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          draft: false
+          prerelease: false
+          body: |
+            Automated backup for **${{ env.BRANCH }}** at **${{ env.RELEASE_NAME }}**.
+
+            - Repo: `${{ github.repository }}`
+            - Commit: `${{ github.sha }}`
+            - Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Upload ZIP to Release
+        if: env.DO_BACKUP == 'true'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/${{ env.ZIP_NAME }}
+          asset_name: ${{ env.ZIP_NAME }}
+          asset_content_type: application/zip
