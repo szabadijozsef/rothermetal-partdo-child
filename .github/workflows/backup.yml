@@ -1,0 +1,47 @@
+name: Theme Backup (ZIP to Releases)
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare ZIP
+        run: |
+          mkdir -p dist
+          ts="$(date -u +'%Y%m%d-%H%M%S')"
+          zipname="partdo-child-${ts}.zip"
+          # csak a két fájl + .gitignore
+          zip -j "dist/${zipname}" functions.php style.css .gitignore
+          echo "ZIP_NAME=${zipname}" >> $GITHUB_ENV
+          echo "TAG_NAME=backup-${{ github.run_number }}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Auto backup #${{ github.run_number }} ($ts)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          draft: false
+          prerelease: false
+
+      - name: Upload ZIP to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/${{ env.ZIP_NAME }}
+          asset_name: ${{ env.ZIP_NAME }}
+          asset_content_type: application/zip

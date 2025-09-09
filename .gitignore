@@ -3,3 +3,10 @@
 !functions.php
 !style.css
 !.gitignore
+
+!.github/
+!.github/workflows/
+# Engedjük a GitHub Actions workflow fájlokat
+!.github/
+!.github/workflows/
+!.github/workflows/*.yml
