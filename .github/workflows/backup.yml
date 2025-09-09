@@ -1,10 +1,11 @@
 name: Theme Backup (ZIP to Releases)
 
 on:
+  workflow_dispatch: {}          # kézi indítás (Actions > Run workflow)
   push:
-    branches: [ main ]
+    branches: [ main ]           # push-ra is
   schedule:
-    - cron: '0 * * * *'  # minden egész órában (UTC)
+    - cron: '0 * * * *'          # minden egész órában (UTC)
 
 permissions:
   contents: write
@@ -21,33 +22,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Csak 08:00–22:00 között fusson tovább (Europe/Budapest)
-      - name: Guard – csak 08:00–22:00 Europe/Budapest között
-        id: guard
-        run: |
-          HOUR=$(TZ=Europe/Budapest date +%H)
-          echo "Local hour (Europe/Budapest) = $HOUR"
-          if [ "$HOUR" -lt 8 ] || [ "$HOUR" -gt 22 ]; then
-            echo "Kívül esik a 08–22 idősávon, a backup lépések most kihagyásra kerülnek."
-            echo "DO_BACKUP=false" >> $GITHUB_ENV
-          else
-            echo "Idősávon belül – backup mehet."
-            echo "DO_BACKUP=true" >> $GITHUB_ENV
-          fi
-
-      - name: Stop if outside window
-        if: env.DO_BACKUP == 'false'
-        run: echo "Skip backup – next run at the next hour within 08–22."
-
-      # ZIP készítés BUILDINFO-val
+      # Itt már nincs időkorlátozás, mindig fut
       - name: Prepare ZIP with BUILDINFO
-        if: env.DO_BACKUP == 'true'
         run: |
           mkdir -p dist
           TS_UTC="$(date -u +'%Y%m%d-%H%M%S')"
           TS_BUD="$(TZ=Europe/Budapest date +'%Y%m%d-%H%M%S')"
-
           ZIPNAME="partdo-child-${TS_BUD}.zip"
+
           COMMIT_SHA="${GITHUB_SHA}"
           COMMIT_MSG="$(git log -1 --pretty=%B | tr -d '\r')"
           REPO="${GITHUB_REPOSITORY}"
@@ -64,38 +46,19 @@ BUD_TIME=${TS_BUD}
 RUN_URL=${RUN_URL}
 EOF
 
-          # ZIP (csak a kulcsfájlok + BUILDINFO)
           zip -j "dist/${ZIPNAME}" functions.php style.css .gitignore BUILDINFO.txt
 
           echo "ZIP_NAME=${ZIPNAME}" >> $GITHUB_ENV
           echo "TAG_NAME=backup-${TS_BUD}-${GITHUB_RUN_ID}" >> $GITHUB_ENV
           echo "RELEASE_NAME=Auto backup ${TS_BUD} (RUN ${GITHUB_RUN_ID})" >> $GITHUB_ENV
+          echo "RELEASE_BODY=Automated backup for ${BRANCH}%0ARepo: ${REPO}%0ACommit: ${COMMIT_SHA}%0ARun: ${RUN_URL}" >> $GITHUB_ENV
 
-      - name: Create GitHub Release
-        if: env.DO_BACKUP == 'true'
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release & Upload ZIP
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.RELEASE_NAME }}
-          draft: false
-          prerelease: false
-          body: |
-            Automated backup for **${{ env.BRANCH }}** at **${{ env.RELEASE_NAME }}**.
-
-            - Repo: `${{ github.repository }}`
-            - Commit: `${{ github.sha }}`
-            - Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-      - name: Upload ZIP to Release
-        if: env.DO_BACKUP == 'true'
-        uses: actions/upload-release-asset@v1
+          name: ${{ env.RELEASE_NAME }}
+          body: ${{ env.RELEASE_BODY }}
+          files: dist/${{ env.ZIP_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/${{ env.ZIP_NAME }}
-          asset_name: ${{ env.ZIP_NAME }}
-          asset_content_type: application/zip
